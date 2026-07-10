@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>26 Stars, 26 Songs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   EDIT ME — everything you need to personalize is right here
+   and in the SONGS / LETTER text further down this file.
+   Search for "EDIT" to find every spot.
+   ============================================================ */
+
+:root{
+  --bg-deep:#05061a;
+  --bg-mid:#0c1230;
+  --nebula-violet:#5b3d8a;
+  --nebula-rose:#a24d78;
+  --star-gold:#f2d492;
+  --star-white:#f5f2ff;
+  --ink:#efe9ff;
+  --ink-dim:#b9b0d9;
+  --line:rgba(242,212,146,0.45);
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  background:radial-gradient(ellipse at 20% 10%, var(--nebula-violet) 0%, transparent 45%),
+             radial-gradient(ellipse at 80% 30%, var(--nebula-rose) 0%, transparent 40%),
+             radial-gradient(ellipse at 50% 80%, #2a1f52 0%, transparent 50%),
+             linear-gradient(180deg, var(--bg-deep), var(--bg-mid) 40%, var(--bg-deep));
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:'Manrope', sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+#stars{position:fixed; inset:0; z-index:0; pointer-events:none;}
+.twinkle{
+  position:absolute; border-radius:50%; background:var(--star-white);
+  animation:twinkle 4s ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{opacity:.15; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.4);}
+}
+@media (prefers-reduced-motion: reduce){
+  .twinkle{animation:none; opacity:.6;}
+}
+
+section{position:relative; z-index:1; padding:6rem 1.5rem; max-width:900px; margin:0 auto;}
+
+/* ---------- Hero ---------- */
+.hero{
+  min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding-top:2rem;
+}
+.eyebrow{
+  font-family:'Manrope'; letter-spacing:.35em; text-transform:uppercase; font-size:.7rem;
+  color:var(--star-gold); margin-bottom:1.5rem; opacity:.85;
+}
+h1.title{
+  font-family:'Cormorant Garamond', serif; font-weight:500; font-style:italic;
+  font-size:clamp(2.4rem, 7vw, 5rem); line-height:1.05; color:var(--star-white);
+  text-shadow:0 0 40px rgba(242,212,146,0.25);
+}
+h1.title .name{ color:var(--star-gold); font-style:normal; }
+.hero-sub{
+  margin-top:1.5rem; font-size:1.05rem; color:var(--ink-dim); max-width:34ch; font-weight:300;
+}
+.scroll-hint{
+  margin-top:4rem; font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-dim);
+  display:flex; flex-direction:column; align-items:center; gap:.6rem; opacity:.7;
+}
+.scroll-hint::after{
+  content:''; width:1px; height:32px; background:linear-gradient(var(--star-gold), transparent);
+  animation:drop 2s ease-in-out infinite;
+}
+@keyframes drop{0%{opacity:0; transform:translateY(-6px);} 50%{opacity:1;} 100%{opacity:0; transform:translateY(10px);}}
+
+/* ---------- Constellation ---------- */
+.const-head{ text-align:center; margin-bottom:2.5rem; }
+.const-head h2{
+  font-family:'Cormorant Garamond', serif; font-weight:500; font-size:clamp(1.8rem,4vw,2.8rem);
+  color:var(--star-white);
+}
+.const-head p{ color:var(--ink-dim); margin-top:.7rem; font-weight:300; font-size:.95rem; }
+
+.sky{
+  width:100%; aspect-ratio:6/5; max-width:620px; margin:0 auto;
+  filter:drop-shadow(0 0 25px rgba(91,61,138,0.35));
+}
+.const-line{ stroke:var(--line); stroke-width:1; fill:none; }
+.const-star{ cursor:pointer; }
+.const-star circle.core{
+  fill:var(--star-gold); transition:r .25s ease, fill .25s ease;
+}
+.const-star:hover circle.core, .const-star.active circle.core{
+  fill:var(--star-white);
+}
+.const-star circle.halo{
+  fill:var(--star-gold); opacity:.18;
+  animation:pulse 3s ease-in-out infinite;
+}
+.const-star:nth-child(3n) circle.halo{ animation-delay:.6s; }
+.const-star:nth-child(5n) circle.halo{ animation-delay:1.2s; }
+@keyframes pulse{ 0%,100%{opacity:.1; r:9;} 50%{opacity:.3; r:13;} }
+.const-num{
+  fill:var(--ink-dim); font-family:'Manrope'; font-size:6px; text-anchor:middle;
+  pointer-events:none; opacity:0; transition:opacity .2s ease;
+}
+.const-star:hover .const-num, .const-star.active .const-num{ opacity:1; fill:var(--star-white); }
+
+/* ---------- Song card ---------- */
+.song-card{
+  margin:2.5rem auto 0; max-width:460px; min-height:110px;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(242,212,146,0.25);
+  border-radius:14px; padding:1.5rem 1.7rem; text-align:center;
+  backdrop-filter:blur(6px);
+  transition:opacity .25s ease, transform .25s ease;
+}
+.song-card .placeholder{ color:var(--ink-dim); font-weight:300; font-size:.9rem; }
+.song-card .num{
+  font-family:'Manrope'; letter-spacing:.25em; text-transform:uppercase; font-size:.68rem;
+  color:var(--star-gold); margin-bottom:.5rem; display:block;
+}
+.song-card .title{
+  font-family:'Cormorant Garamond', serif; font-style:italic; font-size:1.5rem; color:var(--star-white);
+}
+.song-card .artist{ margin-top:.25rem; color:var(--ink-dim); font-size:.95rem; font-weight:300; }
+.song-card .note{ margin-top:.8rem; font-size:.88rem; color:var(--ink); font-weight:300; line-height:1.5; }
+
+/* ---------- Letter ---------- */
+.letter-wrap{ text-align:center; }
+.letter-wrap h2{
+  font-family:'Cormorant Garamond', serif; font-weight:500; font-size:clamp(1.8rem,4vw,2.8rem); color:var(--star-white);
+  margin-bottom:2rem;
+}
+.seal-btn{
+  background:transparent; border:1px solid var(--line); color:var(--star-gold);
+  font-family:'Manrope'; font-size:.85rem; letter-spacing:.15em; text-transform:uppercase;
+  padding:.9rem 2rem; border-radius:999px; cursor:pointer; transition:all .3s ease;
+}
+.seal-btn:hover{ background:rgba(242,212,146,0.1); color:var(--star-white); }
+.seal-btn:focus-visible{ outline:2px solid var(--star-gold); outline-offset:3px; }
+
+.letter{
+  max-height:0; overflow:hidden; opacity:0; transition:max-height .8s ease, opacity .6s ease, margin .6s ease;
+}
+.letter.open{ max-height:1400px; opacity:1; margin-top:2.5rem; }
+
+.letter-paper{
+  background:rgba(255,255,255,0.035); border:1px solid rgba(242,212,146,0.2); border-radius:4px;
+  padding:2.8rem 2.2rem; text-align:left; font-family:'Cormorant Garamond', serif;
+  font-size:1.25rem; line-height:1.85; color:var(--ink);
+}
+.letter-paper p{ margin-bottom:1.2rem; font-weight:400; }
+.letter-paper .signoff{ margin-top:1.8rem; font-style:italic; color:var(--star-gold); }
+
+/* ---------- Footer ---------- */
+footer{
+  text-align:center; padding:4rem 1.5rem 5rem; color:var(--ink-dim); font-size:.8rem;
+  letter-spacing:.1em; font-weight:300;
+}
+
+@media (max-width:600px){
+  section{ padding:4.5rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="eyebrow">a small universe, made for you</div>
+  <!-- EDIT: replace "His Name" -->
+  <h1 class="title">Happy 26th,<br><span class="name">Aswin</span></h1>
+  <p class="hero-sub" id="heroSub">songs, mapped into a sky that's just for you.</p>
+  <div class="scroll-hint">scroll down</div>
+</section>
+
+<!-- ============ CONSTELLATION ============ -->
+<section id="constellation">
+  <div class="const-head">
+    <h2>Find your song</h2>
+    <p>Tap any star to hear why it's yours.</p>
+  </div>
+  <svg class="sky" id="sky" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="song-card" id="songCard">
+    <p class="placeholder">Tap a star above to reveal a song ✦</p>
+  </div>
+</section>
+
+<!-- ============ LETTER ============ -->
+<section id="letter-section">
+  <div class="letter-wrap">
+    <h2>One more thing</h2>
+    <button class="seal-btn" id="openLetter">Open the letter</button>
+    <div class="letter" id="letterBox">
+      <div class="letter-paper">
+        <!-- EDIT: this is your letter. Replace freely — add or remove <p> as needed. -->
+        <p>My love,</p>
+        <p>Twenty-six years made you exactly who you are, and I am endlessly grateful to be standing under the same sky as you. Every song on this page is a small piece of us — a car ride, a late night, a memory I never want to lose.</p>
+        <p>I built you this little galaxy because words alone never feel like enough for how much you mean to me. So here: twenty-six stars, twenty-six songs, and one very real heart, all pointed at you.</p>
+        <p>Happy birthday. I can't wait for everything still ahead of us.</p>
+        <p class="signoff">With love,<br>Your future wife, Harinni</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>made under the same sky ✦</footer>
+
+<script>
+/* ============================================================
+   EDIT ME — put your real 26 songs here, in order.
+   "note" is optional — a short line about why the song matters.
+   ============================================================ */
+/* EDIT: "note" is optional — a short line about why the song matters.
+   Titles for #1 and #27 weren't given — replace "Add a title" with the real name. */
+const SONGS = [
+  {title:"Add a title", note:"", link:"https://youtube.com/shorts/9oPodO8mGQQ?si=OifH6Z4mW5gSTsxl"},
+  {title:"Mayil Eragey", note:"", link:"https://youtube.com/shorts/P3JqvMbaNqE?si=_Bmp7QSfo9awXgi1"},
+  {title:"Nenjukul Peithidum Ma Mazhai", note:"", link:"https://youtube.com/shorts/qOYcqWicWK0?si=NsFamAax6yvHhp0k"},
+  {title:"Enna Solla Pogirai", note:"", link:"https://youtube.com/shorts/rYOZV2ETPKo?si=QAyid58jAeWn3lE5"},
+  {title:"Sidu Sidu", note:"", link:"https://youtube.com/shorts/Xlr15cWZGek?si=-t9ngaj7Nzuj6gvb"},
+  {title:"Unnale Mei Maranthu Nindreney", note:"", link:"https://youtube.com/shorts/_OojVsqS4p8?si=TccAaSsPtpuAF1ex"},
+  {title:"Nee Iravai", note:"", link:"https://youtube.com/shorts/boiv3MIoxF0?si=70na6gC9nt__d19G"},
+  {title:"Neethana Da", note:"", link:"https://youtube.com/shorts/qkJPlyeLPmk?si=LGw7KBYKWsM_gJDn"},
+  {title:"Unai Partha Piragithan", note:"", link:"https://youtube.com/shorts/gsL3ytaF9H8?si=ifJrC37wvt_fJ2jQ"},
+  {title:"Kannavellam Neethaney", note:"", link:"https://youtube.com/shorts/wsY-OAbValw?si=BNeJVcKXqOjbewAV"},
+  {title:"Essa Kathatha", note:"", link:"https://youtube.com/shorts/UAFTFHeXLQA?si=USSZUXOvURRkhVkc"},
+  {title:"Ondra Irandan Asaigal", note:"", link:"https://youtube.com/shorts/iRpOGYbWyyI?si=n_xA6zkIs_Bg9pwn"},
+  {title:"Partha Muthal", note:"", link:"https://youtube.com/shorts/vgzsbGFfI4E?si=4Hj3RWJkuVTbQXrF"},
+  {title:"Unnodu Vazhatha", note:"", link:"https://youtube.com/shorts/OE4YB5trEGo?si=6z-m1fCNlDTvDaMl"},
+  {title:"Nejorathil", note:"", link:"https://youtube.com/shorts/u_Dh-oSPsvA?si=84w-up_YjaERebSh"},
+  {title:"Ariyamal Na Iruka", note:"", link:"https://youtube.com/shorts/DGkqB8Jvrog?si=e_qGBH218kVyBztm"},
+  {title:"Aathadi Manasuthan", note:"", link:"https://youtube.com/shorts/lp323j3ywOM?si=xo2HVQtRu5M5jxLg"},
+  {title:"Un Thara Un Thara", note:"", link:"https://youtube.com/shorts/FsEA_jI-8Cg?si=73KCrcrGRaAHhAP1"},
+  {title:"En Ya En Kottikara", note:"", link:"https://youtube.com/shorts/tTGHP13rQuE?si=uet8RxszZ-MtXviP"},
+  {title:"Anjali Anjali", note:"", link:"https://youtube.com/shorts/FD25JpH6CPs?si=Vnxfs2i39fljN9Cd"},
+  {title:"Kannalaney", note:"", link:"https://youtube.com/shorts/xBHAYm2-AIk?si=7a54zS2K2I2t2iyc"},
+  {title:"Hayyoda", note:"", link:"https://youtube.com/shorts/e2iy1j9QLsU?si=Hik_lOQpeKcO545S"},
+  {title:"Anbe Anbe Ellameh Anbe", note:"", link:"https://youtube.com/shorts/VAXFeGIDLPA?si=-3AgN1UeFzM1NL6n"},
+  {title:"Yaro Manathil", note:"", link:"https://youtube.com/shorts/S4x9kkGyhOE?si=1efxhZ3Z9LVmBgC5"},
+  {title:"Muzhusa Unnakena Na Vazhura", note:"", link:"https://youtube.com/shorts/74HPV2Z4ux4?si=A-nNiw2sEGl842pv"},
+  {title:"Avanai", note:"", link:"https://youtube.com/shorts/thFt4-Lb0oU?si=9CKUY8LR13S74Qhw"},
+  {title:"Add a title", note:"The last one — the newest star in the sky.", link:"https://youtube.com/shorts/KDqY5o8O2Pk?si=NsCFtLf7KuH4Ja0z"}
+];
+
+/* ---------- background twinkle field ---------- */
+document.getElementById('heroSub').textContent = SONGS.length + ' songs, mapped into a sky that\'s just for you.';
+
+(function starfield(){
+  const wrap = document.getElementById('stars');
+  const count = 140;
+  for(let i=0;i<count;i++){
+    const s = document.createElement('div');
+    s.className = 'twinkle';
+    const size = Math.random()*2 + 0.6;
+    s.style.width = size+'px';
+    s.style.height = size+'px';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.animationDelay = (Math.random()*4)+'s';
+    s.style.animationDuration = (3+Math.random()*3)+'s';
+    wrap.appendChild(s);
+  }
+})();
+
+/* ---------- heart-shaped constellation of 26 stars ---------- */
+(function constellation(){
+  const svg = document.getElementById('sky');
+  const N = SONGS.length; // 26
+  const cx = 300, cy = 250, scale = 15.5;
+  const pts = [];
+
+  for(let i=0;i<N;i++){
+    const t = (i / N) * Math.PI * 2;
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+    pts.push({
+      x: cx + x*scale,
+      y: cy - y*scale   // flip: svg y grows downward
+    });
+  }
+
+  const ns = 'http://www.w3.org/2000/svg';
+
+  // connecting lines first (so stars render on top)
+  for(let i=0;i<N;i++){
+    const a = pts[i], b = pts[(i+1)%N];
+    const line = document.createElementNS(ns,'line');
+    line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+    line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+    line.setAttribute('class','const-line');
+    svg.appendChild(line);
+  }
+
+  const card = document.getElementById('songCard');
+  let activeStar = null;
+
+  pts.forEach((p, i) => {
+    const g = document.createElementNS(ns,'g');
+    g.setAttribute('class','const-star');
+    g.setAttribute('tabindex','0');
+    g.setAttribute('role','button');
+    g.setAttribute('aria-label', `Song ${i+1}`);
+
+    const halo = document.createElementNS(ns,'circle');
+    halo.setAttribute('class','halo');
+    halo.setAttribute('cx',p.x); halo.setAttribute('cy',p.y); halo.setAttribute('r',9);
+    g.appendChild(halo);
+
+    const core = document.createElementNS(ns,'circle');
+    core.setAttribute('class','core');
+    core.setAttribute('cx',p.x); core.setAttribute('cy',p.y); core.setAttribute('r',3.4);
+    g.appendChild(core);
+
+    const num = document.createElementNS(ns,'text');
+    num.setAttribute('class','const-num');
+    num.setAttribute('x',p.x); num.setAttribute('y', p.y - 9);
+    num.textContent = i+1;
+    g.appendChild(num);
+
+    function activate(){
+      if(activeStar) activeStar.classList.remove('active');
+      g.classList.add('active');
+      activeStar = g;
+      const s = SONGS[i];
+      card.innerHTML = `
+        <span class="num">Star ${i+1} of ${N}</span>
+        <div class="title">${s.title}</div>
+        ${s.link ? `<a class="artist" href="${s.link}" target="_blank" rel="noopener" style="text-decoration:underline; color:var(--star-gold);">▶ watch on YouTube</a>` : ``}
+        ${s.note ? `<div class="note">${s.note}</div>` : ``}
+      `;
+    }
+
+    g.addEventListener('click', activate);
+    g.addEventListener('keydown', (e) => { if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); }});
+
+    svg.appendChild(g);
+  });
+})();
+
+/* ---------- letter open/close ---------- */
+document.getElementById('openLetter').addEventListener('click', function(){
+  const box = document.getElementById('letterBox');
+  const opening = !box.classList.contains('open');
+  box.classList.toggle('open');
+  this.textContent = opening ? 'Close the letter' : 'Open the letter';
+});
+</script>
+
+</body>
+</html>
